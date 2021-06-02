@@ -25,13 +25,13 @@ public class Hilos extends Thread
 		}
 	}
 	// En el método run() lo primero que hacemos
-	// es enviar todos los mensajes actuales al cliente que se
+	// es enviar todos los msgs actuales al cliente que se
 	// acaba de incorporar
 	public void run()
 	{
-		Servidor.mensaje.setText("Número de conexiones actuales: " + Servidor.ACTUALES);
+		Servidor.msg.setText("Número de conexiones actuales: " + Servidor.ACTUALES);
 		//String texto = Servidor.textarea.getText();
-		//EnviarMensajes(texto);
+		//Enviarmsgs(texto);
 		// Seguidamente, se crea un bucle en el que se recibe lo que el cliente escribe en el chat.
 		// Cuando un cliente finaliza con el botón Salir, se envía un * al servidor del Chat,
 		// entonces se sale del bucle while, ya que termina el proceso del cliente,
@@ -46,7 +46,7 @@ public class Hilos extends Thread
 				if(cadena.trim().equals("*"))
 				{
 					Servidor.ACTUALES--;
-					Servidor.mensaje.setText("Número de conexiones actuales: "
+					Servidor.msg.setText("Número de conexiones actuales: "
 							+ Servidor.ACTUALES);
 					
 					fin=true;
@@ -57,7 +57,7 @@ public class Hilos extends Thread
 				{
 					Servidor.textarea.append(cadenaDesencriptada + "\n");
 					//texto = Servidor.textarea.getText();
-					EnviarMensajes(cadena);
+					Enviarmsgs(cadena);
 				}
 			}
 			
@@ -68,11 +68,11 @@ public class Hilos extends Thread
 			}
 		}
 	}
-	// El método EnviarMensajes() envía el texto del textarea a
+	// El método Enviarmsgs() envía el texto del textarea a
 	// todos los sockets que están en la tabla de sockets,
 	// de esta forma todos ven la conversación.
 	// El programa abre un stream de salida para escribir el texto en el socket
-	private void EnviarMensajes(String texto)
+	private void Enviarmsgs(String texto)
 	{
 		for(int i=0; i<Servidor.CONEXIONES; i++)
 		{
@@ -91,7 +91,7 @@ public class Hilos extends Thread
 	}	
 	
 	
-	public String desencriptacion(String mensaje) 
+	public String desencriptacion(String msg) 
 	{
 		String resultado = "";
 		try
@@ -101,13 +101,13 @@ public class Hilos extends Thread
 			rsa.genKeyPair(512);
 			rsa.openFromDiskPrivateKey("rsa.pri");
 			rsa.openFromDiskPublicKey("rsa.pub");
-			String encriptado = mensaje;
+			String encriptado = msg;
 			String desencriptado = rsa.Decrypt(encriptado);
 			
-			System.out.println("Recibe mensaje");
+			System.out.println("Recibe msg");
 			System.out.println("Texto encriptado: "+ encriptado);
 			System.out.println("Texto desncriptado: "+ desencriptado+ "\n");
-			System.out.println("Reenvía mensaje");
+			System.out.println("Reenvía msg");
 			System.out.println("Texto encriptado: "+ encriptado+ "\n");
 			
 			resultado = desencriptado;			
