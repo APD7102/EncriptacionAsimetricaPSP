@@ -20,8 +20,8 @@ public class Servidor extends JFrame implements ActionListener
 	static int CONEXIONES = 0;
 	static int ACTUALES = 0;
 	static int MAXIMO = 15;
-	static JTextField mensaje = new JTextField("");
-	static JTextField mensaje2 = new JTextField("");
+	static JTextField msg = new JTextField("");
+	static JTextField msg2 = new JTextField("");
 	private JScrollPane scrollpane1;
 	static JTextArea textarea;
 	JButton salir = new JButton("Salir");
@@ -29,14 +29,14 @@ public class Servidor extends JFrame implements ActionListener
 	public Servidor()
 	{
 		// Construimos el entorno gráfico
-		super(" VENTANA DEL SERVIDOR DE CHAT ");
+		super("SERVIDOR");
 		setLayout(null);
-		mensaje.setBounds(10, 10, 400, 30);
-		add(mensaje);
-		mensaje.setEditable(false);
-		mensaje2.setBounds(10, 348, 400, 30);
-		add(mensaje2);
-		mensaje2.setEditable(false);
+		msg.setBounds(10, 10, 400, 30);
+		add(msg);
+		msg.setEditable(false);
+		msg2.setBounds(10, 348, 400, 30);
+		add(msg2);
+		msg2.setEditable(false);
 		textarea = new JTextArea();
 		scrollpane1 = new JScrollPane(textarea);
 		scrollpane1.setBounds(10, 50, 400, 300);
@@ -56,11 +56,11 @@ public class Servidor extends JFrame implements ActionListener
 		// Desde el main se inicia el servidor
 		// y las variables y se prepara la pantalla
 		servidor = new ServerSocket(PUERTO);
-		System.out.println("Servidor iniciado...");
+		System.out.println("Servidor iniciado");
 		Servidor pantalla = new Servidor();
 		pantalla.setBounds(0, 0, 540, 450);
 		pantalla.setVisible(true);
-		mensaje.setText("Número de conexiones actuales: " + 0);
+		msg.setText("Número de conexiones actuales: " + 0);
 		// Se usa un bucle para controlar el número de conexiones.
 		// Dentro del bucle el servidor espera la conexión
 		// del cliente y cuando se conecta se crea un socket
@@ -78,7 +78,7 @@ public class Servidor extends JFrame implements ActionListener
 			}
 			// El socket creado se añade a la tabla,
 			// se incrementa el número de conexiones
-			// y se lanza el hilo para gestionar los mensajes
+			// y se lanza el hilo para gestionar los msgs
 			// del cliente que se acaba de conectar
 			tabla[CONEXIONES] = socket;
 			CONEXIONES++;
@@ -97,8 +97,8 @@ public class Servidor extends JFrame implements ActionListener
 		{
 			try
 			{
-				mensaje2.setForeground(Color.red);
-				mensaje2.setText("Máximo Nº de conexiones establecidas: " +
+				msg2.setForeground(Color.red);
+				msg2.setText("Máximo Nº de conexiones establecidas: " +
 						CONEXIONES);
 				servidor.close();
 			}
@@ -109,7 +109,7 @@ public class Servidor extends JFrame implements ActionListener
 		}
 		else
 		{
-			System.out.println("Servidor finalizado...");
+			System.out.println("Servidor finalizado");
 		}
 	}
 	public void actionPerformed(ActionEvent e)

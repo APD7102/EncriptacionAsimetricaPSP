@@ -17,14 +17,14 @@ public class Cliente extends JFrame implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
 	Socket socket;
-	DataInputStream fentrada;
-	DataOutputStream fsalida;
+	DataInputStream input;
+	DataOutputStream output;
 	String nombre;
 	static JTextField mensaje = new JTextField();
 	private JScrollPane scrollpane;
 	static JTextArea textarea;
 	JButton boton = new JButton("Enviar");
-	JButton desconectar = new JButton("Salir");
+	JButton salir = new JButton("Salir");
 	boolean repetir = true;
 	static boolean repetir2 = true;
 	
@@ -32,7 +32,7 @@ public class Cliente extends JFrame implements ActionListener
 	
 	{
 		// Prepara la pantalla. Se recibe el socket creado y el nombre del cliente
-		super(" Conexión del cliente chat: " + nombre);
+		super(" Conexión del cliente: " + nombre);
 		setLayout(null);
 		mensaje.setBounds(10, 10, 400, 30);
 		add(mensaje);
@@ -42,12 +42,12 @@ public class Cliente extends JFrame implements ActionListener
 		add(scrollpane);
 		boton.setBounds(420, 10, 100, 30);
 		add(boton);
-		desconectar.setBounds(420, 50, 100, 30);
-		add(desconectar);
+		salir.setBounds(420, 50, 100, 30);
+		add(salir);
 		textarea.setEditable(false);
 		boton.addActionListener(this);
 		this.getRootPane().setDefaultButton(boton);
-		desconectar.addActionListener(this);
+		salir.addActionListener(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.socket = socket;
 		this.nombre = nombre;
@@ -58,10 +58,10 @@ public class Cliente extends JFrame implements ActionListener
 		// lo reenvía a todos los clientes conectados
 		try
 		{
-			fentrada = new DataInputStream(socket.getInputStream());
-			fsalida = new DataOutputStream(socket.getOutputStream());
-			String texto = "SERVIDOR> Entra en el chat... " + nombre;
-			fsalida.writeUTF(encriptacion(texto));
+			input = new DataInputStream(socket.getInputStream());
+			output = new DataOutputStream(socket.getOutputStream());
+			String texto = "SERVIDOR>" + nombre + " ha entrado";
+			output.writeUTF(encriptacion(texto));
 		}
 		catch (IOException ex)
 		{
@@ -80,7 +80,7 @@ public class Cliente extends JFrame implements ActionListener
 	{
 		do {
 			int puerto = 44444;
-			String nombre = JOptionPane.showInputDialog("Introduce tu nombre o nick:");
+			String nombre = JOptionPane.showInputDialog("Introduce tu nickname:");
 			if(!nombre.trim().equals("")) 
 			{
 				Socket socket = null;
@@ -104,8 +104,8 @@ public class Cliente extends JFrame implements ActionListener
 			}		
 			else
 			{
-				JOptionPane.showMessageDialog(null,"El nombre está vacío...");
-				System.out.println("El nombre está vacío...");
+				JOptionPane.showMessageDialog(null,"El nombre está vacío");
+				System.out.println("El nombre está vacío");
 			}
 		}while (repetir2);
 	}
@@ -120,7 +120,7 @@ public class Cliente extends JFrame implements ActionListener
 			try
 			{
 				mensaje.setText("");
-				fsalida.writeUTF(encriptacion(texto));
+				output.writeUTF(encriptacion(texto));
 			}
 			catch (IOException ex)
 			{
@@ -131,13 +131,13 @@ public class Cliente extends JFrame implements ActionListener
 		// se envía un mensaje indicando que el cliente abandona el chat
 		// y también se envía un * para indicar
 		// al servidor que el cliente se ha cerrado
-		else if(e.getSource()==desconectar)
+		else if(e.getSource()==salir)
 		{
-			String texto = "SERVIDOR> Abandona el chat... " + nombre;
+			String texto = "SERVIDOR>" + nombre + " ha abandonado";
 			try
 			{
-				fsalida.writeUTF(encriptacion(texto));
-				fsalida.writeUTF("*");
+				output.writeUTF(encriptacion(texto));
+				output.writeUTF("*");
 				repetir = false;
 			}
 			catch (IOException ex)
@@ -158,7 +158,7 @@ public class Cliente extends JFrame implements ActionListener
 		{
 			try 			
 			{
-				texto = fentrada.readUTF();
+				texto = input.readUTF();
 				String textodesencriptado =desencriptacion(texto);
 				textarea.append(textodesencriptado+ "\n");
 			}
