@@ -7,7 +7,7 @@ import java.net.Socket;
 public class Hilos extends Thread
 {
 	String texto = "";
-	DataInputStream fentrada;
+	DataInputStream entrada;
 	Socket socket;
 	boolean fin = false;
 	public Hilos(Socket socket)
@@ -15,7 +15,7 @@ public class Hilos extends Thread
 		this.socket = socket;
 		try
 		{
-			fentrada = new DataInputStream(socket.getInputStream());
+			entrada = new DataInputStream(socket.getInputStream());
 		}
 		
 		catch (IOException e)
@@ -41,7 +41,7 @@ public class Hilos extends Thread
 			String cadena = "";
 			try
 			{
-				cadena = fentrada.readUTF();
+				cadena = entrada.readUTF();
 				String cadenaDesencriptada = desencriptacion(cadena);
 				if(cadena.trim().equals("*"))
 				{

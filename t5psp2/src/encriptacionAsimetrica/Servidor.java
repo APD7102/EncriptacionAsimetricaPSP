@@ -22,7 +22,7 @@ public class Servidor extends JFrame implements ActionListener
 	static int MAXIMO = 15;
 	static JTextField msg = new JTextField("");
 	static JTextField msg2 = new JTextField("");
-	private JScrollPane scrollpane1;
+	private JScrollPane sc;
 	static JTextArea textarea;
 	JButton salir = new JButton("Salir");
 	static Socket[] tabla = new Socket[MAXIMO];
@@ -38,9 +38,9 @@ public class Servidor extends JFrame implements ActionListener
 		add(msg2);
 		msg2.setEditable(false);
 		textarea = new JTextArea();
-		scrollpane1 = new JScrollPane(textarea);
-		scrollpane1.setBounds(10, 50, 400, 300);
-		add(scrollpane1);
+		sc = new JScrollPane(textarea);
+		sc.setBounds(10, 50, 400, 300);
+		add(sc);
 		salir.setBounds(420, 10, 100, 30);
 		add(salir);
 		textarea.setEditable(false);
